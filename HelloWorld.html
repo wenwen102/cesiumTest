@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Use correct character set. -->
+    <meta charset="utf-8" />
+    <!-- Tell IE to use the latest, best version. -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- Make the application on mobile take up the full browser screen and disable user scaling. -->
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no"
+    />
+    <title>Hello World!</title>
+    <script src="Build/CesiumUnminified/Cesium.js"></script>
+    <style>
+      @import url(Build/CesiumUnminified/Widgets/widgets.css);
+      html,
+      body,
+      #cesiumContainer {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="cesiumContainer"></div>
+    <script>
+      Cesium.Ion.defaultAccessToken =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJhOWZkZDMyNS04ZTcxLTQyODEtYTIxOS04NzkzMDI4MWYyMTciLCJpZCI6MTIwMTIwLCJpYXQiOjE2NzI3MTU5MDl9.AkykevLNG7aImztKVzQCC18u0LCfTFwlbL-qNzS87qE";
+
+      // Viewer 是Cesium任何应用程序的基础
+      const viewer = new Cesium.Viewer("cesiumContainer");
+      // Add Sentinel-2 imagery
+      viewer.imageryLayers.addImageryProvider(
+        new Cesium.IonImageryProvider({ assetId: 3954 })
+      );
+      // Remove default base layer
+      viewer.imageryLayers.remove(viewer.imageryLayers.get(0));
+      // Load Cesium World Terrain
+      viewer.terrainProvider = Cesium.createWorldTerrain({
+        requestWaterMask: true, // required for water effects
+        requestVertexNormals: true, // required for terrain lighting
+      });
+      // Enable depth testing so things behind the terrain disappear.
+      viewer.scene.globe.depthTestAgainstTerrain = true;
+
+      // view.scene 控制了viewer中的多有图形元素
+      // 激活太阳位置的日照
+      viewer.scene.globe.enableLightning = true;
+    </script>
+  </body>
+</html>
