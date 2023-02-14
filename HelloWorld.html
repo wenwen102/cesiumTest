@@ -50,6 +50,58 @@
       // view.scene 控制了viewer中的多有图形元素
       // 激活太阳位置的日照
       viewer.scene.globe.enableLightning = true;
+
+      // 入门五: 绘制形状
+      // 1.通过entities添加形状
+      const redBox = viewer.entities.add({
+        name: "red box with black outline",
+        position: Cesium.Cartesian3.fromDegrees(-107, 40, 30000),
+        box: {
+          dimensions: new Cesium.Cartesian3(400000, 300000, 500000),
+          material: Cesium.Color.RED.withAlpha(0.5),
+          outilne: true,
+          outlineColor: Cesium.Color.BLACK,
+        },
+      });
+      // 2.通过CZML添加形状
+      // czml还可以描述动画
+      // 是一种JSON格式的字符串, 描述与时间有关的动画场景
+      var czml = [
+        {
+          id: "document",
+          name: "box",
+          version: "1.0",
+        },
+        {
+          id: "shape2",
+          name: "Red box with black outline",
+          position: {
+            cartographicDegrees: [-107.0, 40.0, 300000.0],
+          },
+          box: {
+            dimensions: {
+              cartesian: [400000.0, 300000.0, 500000.0],
+            },
+            material: {
+              solidColor: {
+                color: {
+                  rgba: [255, 0, 0, 128],
+                },
+              },
+            },
+            outline: true,
+            outlineColor: {
+              rgba: [0, 0, 0, 255],
+            },
+          },
+        },
+      ];
+
+      var dataSourcePromise = Cesium.CzmlDataSource.load(czml);
+      viewer.dataSources.add(dataSourcePromise);
+      viewer.zoomTo(dataSourcePromise);
+
+      // viewer.zoomTo(viewer.entities);
     </script>
   </body>
 </html>
